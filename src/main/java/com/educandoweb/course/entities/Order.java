@@ -3,6 +3,7 @@ package com.educandoweb.course.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moments;
 	
+	private Integer orderStatus;
 	
 	@ManyToOne
 	@JoinColumn(name = "client_id")
@@ -34,10 +36,11 @@ public class Order implements Serializable {
 
 	}
 
-	public Order(Long id, Instant moments, User client) {
+	public Order(Long id, Instant moments, OrderStatus orderStatus, User client) {
 
 		this.id = id;
 		this.moments = moments;
+		setOrderStatus(orderStatus);;
 		this.client = client;
 	}
 
@@ -55,6 +58,15 @@ public class Order implements Serializable {
 
 	public void setMoments(Instant moments) {
 		this.moments = moments;
+	}
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null)
+			this.orderStatus = orderStatus.getCode();
 	}
 
 	public User getClient() {
